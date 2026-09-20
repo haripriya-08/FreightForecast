@@ -15,7 +15,7 @@ import { alerts, buildFreightSeries, contractStrategies, idleRisks, opportunitie
 //   GET /charter-opportunities                       -> CharterOpportunity[]
 //   GET /contract-strategy                           -> ContractStrategy[]
 
-const API_URL = import.meta.env.VITE_API_URL as string | undefined;
+const API_URL = import.meta.env["VITE_API_URL"] as string | undefined;
 const demoDelay = (ms = 260) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function get<T>(path: string, mock: () => T | Promise<T>, delay = 120): Promise<T> {
