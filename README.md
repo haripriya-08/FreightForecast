@@ -1,29 +1,63 @@
-# Welcome to your Lovable project
+# FreightIQ — AI-Powered Freight Forecasting & Chartering Intelligence
 
-This project was built with [Lovable](https://lovable.dev).
+Frontend for predictive freight strategy on India's East Coast bulk cargo routes.
+Built with TanStack Start (React 19), TypeScript, Tailwind CSS v4, Recharts, and lucide-react.
 
-## Build with Lovable
+## Run it
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+```bash
+bun install
+bun dev
 ```
 
-## Built with
+## Project structure
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+```text
+src/
+  routes/
+    __root.tsx        # Root layout, fonts, head metadata
+    index.tsx         # App entry — renders FreightIQ + Toaster
+  components/
+    freightiq.tsx     # All screens: Landing, Dashboard, Forecast, Charter Planner,
+                      # Vessel Optimizer, Port Intelligence, Idle Risk, Alerts,
+                      # Contract Strategy, Reports, Settings
+    ui/               # Reusable primitives (button, dialog, input, sheet, ...)
+  lib/
+    api.ts            # ★ Single data-access layer — backend integration point
+    mockData.ts       # Deterministic demo data (used when no backend is set)
+    types.ts          # All shared TypeScript interfaces
+    utils.ts          # cn() class helper
+  styles.css          # Design tokens (Light Maritime Paper theme)
+```
+
+## Connecting a real backend
+
+Everything the UI displays flows through `src/lib/api.ts` — no component ever
+reads mock data directly.
+
+1. Create `.env` with your API base URL:
+
+   ```env
+   VITE_API_URL=http://localhost:4000
+   ```
+
+2. Implement these GET endpoints returning JSON matching `src/lib/types.ts`:
+
+   | Endpoint | Returns |
+   | --- | --- |
+   | `/freight-forecast?vessel=…&horizon=…` | `FreightPoint[]` |
+   | `/routes` | `Route[]` |
+   | `/ports` | `Port[]` |
+   | `/vessels` | `Vessel[]` |
+   | `/market-alerts` | `MarketAlert[]` |
+   | `/idle-risks` | `IdleRisk[]` |
+   | `/charter-opportunities` | `CharterOpportunity[]` |
+   | `/contract-strategy` | `ContractStrategy[]` |
+
+3. That's it — when `VITE_API_URL` is set, the app fetches from your backend;
+   when it is unset, it falls back to the built-in demo data. No other code changes needed.
+
+## Notes
+
+- All demo outputs are labeled "Demo Decision Model" — no real ML claims.
+- Savings formula: `(spot rate − contract rate) × volume × voyages`.
